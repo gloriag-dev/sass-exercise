@@ -1,0 +1,120 @@
+@function result($pix) {
+  @return unquote(calc($pix / 16px) + "rem");
+}
+
+$primary-color: red;
+$secondary-color: blue;
+$tertiary-color: green;
+$border1: 2px solid green;
+$border2: 2px solid blue;
+$border3: 2px solid red;
+$font_size: 16px;
+
+$sizes: 1rem, 2rem, 3rem;
+// Questo codice utilizza un loop Sass chiamato @each per iterare su una lista di $sizes.
+// Per ogni elemento nella lista, viene creata una classe CSS .fs-#{$size}
+//con una dimensione del carattere uguale a $size. Imposta inoltre la larghezza
+//e l'altezza al risultato di una funzione chiamata result(45px).
+
+@each $size in $sizes {
+  .fs-#{$size} {
+    font-size: $size;
+    width: result(45px);
+    height: result(45px);
+  }
+}
+
+//Questo codice utilizza un loop Sass
+//chiamato @for per iterare su un intervallo di numeri da 1 a 19.
+// Per ogni numero nell'intervallo, verifica se il numero non è uguale a 10 utilizzando @if.
+// Se non è uguale a 10, seleziona un elemento div con una classe che inizia con "fs"
+//ed è l'n-esimo figlio del suo elemento genitore con un colore di sfondo
+//che è scurito del 5% volte il numero corrente (calc(5% * $i))
+//e un colore del testo che è schiarito dalla stessa quantità.
+//Se il numero è 10, seleziona lo stesso elemento div ma con
+//un colore di sfondo e di testo diverso e con un font-weight in grassetto.//
+
+@for $i from 1 through 19 {
+  @if $i != 10 {
+    div[class^="fs"]:nth-child(#{$i}) {
+      background-color: darken(white, calc(5% * $i));
+      color: lighten(black, calc(5% * $i));
+    }
+  } @else {
+    div[class^="fs"]:nth-child(#{$i}) {
+      background-color: $secondary-color;
+      color: $primary-color;
+      font-weight: bold;
+    }
+  }
+}
+//Il selettore %pagetitle in Sass definisce un selettore di segnaposto silenzioso, noto anche come classe di segnaposto.
+// Una classe di segnaposto è un selettore che viene definito ma non prodotto
+//nel CSS compilato a meno che non venga esteso da un altro selettore utilizzando la direttiva @extend.
+//Le classi di segnaposto sono utili per definire stili comuni che possono essere condivisi
+//tra più selettori senza duplicare il codice. Possono anche essere utilizzate per creare varianti
+// di uno stile comune estendendo la classe di segnaposto e aggiungendo stili aggiuntivi.
+%pagetitle {
+  color: $tertiary-color;
+  text-align: center;
+  text-decoration: underline $secondary-color;
+}
+
+div {
+  border: $border3;
+  max-width: 1440px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 10px;
+  gap: 10px;
+
+  h1 {
+    @extend %pagetitle;
+  }
+
+  h2 {
+    @extend %pagetitle;
+    padding: 1rem;
+    border: $border3;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  section {
+    display: flex;
+
+    article {
+      &:nth-child(even) {
+        border: $border1;
+        color: $primary-color;
+        padding: 10px;
+        text-align: center;
+        font-size: result(16px);
+      }
+
+      &:nth-child(odd) {
+        border: $border1;
+        color: $secondary-color;
+        padding: 10px;
+        text-align: center;
+      }
+    }
+
+    &:nth-child(even) {
+      min-width: 98.5%;
+    }
+
+    &:last-child {
+      width: 98.5%;
+
+      article {
+        border: $border2;
+        color: $tertiary-color;
+        min-width: 100%;
+        text-align: center;
+        font-size: result(24px);
+      }
+    }
+  }
+}

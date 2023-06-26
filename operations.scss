@@ -1,0 +1,36 @@
+@use "sass:math" as math;
+@use "sass:list" as list;
+@use "sass:string" as str;
+
+//La funzione converte il numero decimale in una cifra esadecimale.
+// Se il numero è compreso tra 0 e 9, la funzione restituisce il numero stesso.
+//Altrimenti, la funzione sottrae 9 dal numero e restituisce la lettera esadecimale
+// corrispondente (A, B, C, D, E, o F).
+//La funzione utilizza anche il selettore list.nth() per accedere all'elemento corrispondente nell'elenco.
+@function decToHex($num) {
+  $arr: (A B C D E F);
+  @if $num > 9 {
+    $hex: $num - 9;
+    @return list.nth($arr, $hex);
+  } @else {
+    @return $num;
+  }
+}
+//La funzione utilizza la funzione decToHex() per convertire numeri casuali generati
+// dalla funzione math.random() in cifre esadecimali.
+//Ogni colore è rappresentato da due cifre esadecimali,
+//quindi la funzione genera sei cifre esadecimali in totale per rappresentare il colore
+//(due per il rosso, due per il verde e due per il blu).
+//Infine, la funzione restituisce una stringa che rappresenta il colore casuale
+//nel formato esadecimale con il prefisso #.
+@function randomHex() {
+  $red1: decToHex(math.random(15));
+  $red2: decToHex(math.random(15));
+  $blue1: decToHex(math.random(15));
+  $blue2: decToHex(math.random(15));
+  $green1: decToHex(math.random(15));
+  $green2: decToHex(math.random(15));
+  @return str.unquote(
+    "#" + $red1 + $red2 + $green1 + $green2 + $blue1 + $blue2
+  );
+}
